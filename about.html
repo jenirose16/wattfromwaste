@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>About — Waste to Watts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navbar (shared) -->
+  <header class="header">
+    <div class="container navbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Waste to Watts logo">
+        <h1>Waste to Watts</h1>
+      </div>
+      <nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+        <div id="nav-links" class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="future.html">Future Scope</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="title">
+        <h2>About the Project</h2>
+      </div>
+
+      <!-- Problem -->
+      <div class="card mb-2">
+        <h3>Problem</h3>
+        <p>Paper waste is one of the most common and overlooked forms of pollution. Most of it ends up in landfills, contributing to environmental damage.</p>
+      </div>
+
+      <!-- Concept -->
+      <div class="card mb-2">
+        <h3>Concept</h3>
+        <p>The Waste to Watts system combines Microbial Fuel Cell (MFC) technology with cloud-connected IoT monitoring. Paper waste is deposited into the smart dustbin where microbes break down cellulose and release electrons. Electrodes capture those electrons and generate a small current which is conditioned and stored in a supercapacitor or battery. An ESP32 collects voltage, current, moisture and weight data and sends it to a cloud dashboard for visualization and alerts.</p>
+      </div>
+
+      <!-- Benefits -->
+      <div class="card">
+        <h3>Benefits</h3>
+        <ul>
+          <li>Converts waste into clean energy</li>
+          <li>Digital monitoring</li>
+          <li>Low-cost design</li>
+          <li>Educational value</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="muted">© Waste to Watts — Smart Dustbin Energy System</div>
+        <div class="muted">Built with ♥ • <a href="#">GitHub</a> • <a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle && navToggle.addEventListener('click', ()=>{
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

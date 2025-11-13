@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="lg" x1="0" x2="1">
+      <stop offset="0" stop-color="#eafaf1"/>
+      <stop offset="1" stop-color="#f0f8ff"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0" x2="1">
+      <stop offset="0" stop-color="#2ecc71"/>
+      <stop offset="1" stop-color="#3498db"/>
+    </linearGradient>
+  </defs>
+  <rect width="1600" height="900" fill="url(#lg)"/>
+  <!-- soft abstract shapes -->
+  <circle cx="280" cy="220" r="160" fill="url(#g2)" opacity="0.08"/>
+  <circle cx="1400" cy="120" r="260" fill="#2ecc71" opacity="0.04"/>
+  <rect x="60" y="540" width="1200" height="260" rx="80" fill="#3498db" opacity="0.02"/>
+
+  <!-- stylized microbe / leaf icon -->
+  <g transform="translate(920,220) scale(1.6)">
+    <path d="M-60,20 C-40,-40 40,-40 60,20 C40,10 0,-10 -20,10 C-40,30 -60,30 -60,20 Z" fill="#2ecc71" opacity="0.95"/>
+    <circle cx="10" cy="-6" r="6" fill="#fff" opacity="0.9"/>
+  </g>
+
+  <!-- subtle grid lines -->
+  <g opacity="0.02" stroke="#073642" stroke-width="1">
+    <path d="M0 0 L1600 0" />
+    <path d="M0 100 L1600 100" />
+    <path d="M0 200 L1600 200" />
+  </g>
+</svg>

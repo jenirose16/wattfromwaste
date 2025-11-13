@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>How It Works — Waste to Watts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navbar (shared) -->
+  <header class="header">
+    <div class="container navbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Waste to Watts logo">
+        <h1>Waste to Watts</h1>
+      </div>
+      <nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+        <div id="nav-links" class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="future.html">Future Scope</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="title">
+        <h2>How It Works</h2>
+      </div>
+
+      <div class="card mb-2">
+        <div class="steps">
+          <div class="step">
+            <div class="num">1</div>
+            <div>
+              <h4>Paper waste is placed inside the smart dustbin.</h4>
+              <p class="desc muted">Users deposit paper into the MFC chamber designed for cellulose breakdown.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">2</div>
+            <div>
+              <h4>Microbes decompose cellulose and release electrons.</h4>
+              <p class="desc muted">Electrogenic microbes metabolize organic material producing electrons as a byproduct.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">3</div>
+            <div>
+              <h4>Electrons travel through electrodes generating current.</h4>
+              <p class="desc muted">Anode and cathode capture the electron flow to produce usable current.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">4</div>
+            <div>
+              <h4>Current stored in battery/supercapacitor.</h4>
+              <p class="desc muted">Power conditioning circuits store energy for short bursts or charging a battery.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">5</div>
+            <div>
+              <h4>ESP32 collects sensor data.</h4>
+              <p class="desc muted">Voltage, current, moisture and weight sensors are sampled by the ESP32 microcontroller.</p>
+            </div>
+          </div>
+
+          <div class="step">
+            <div class="num">6</div>
+            <div>
+              <h4>Data uploaded to cloud dashboard.</h4>
+              <p class="desc muted">Telemetry is sent over Wi‑Fi to a cloud service for visualization and alerts.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Sample Performance</h3>
+        <table class="table">
+          <thead>
+            <tr>
+              <th>Paper (g)</th>
+              <th>Voltage (V)</th>
+              <th>Power (mW)</th>
+              <th>Stored Energy (mWh)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>5</td>
+              <td>0.45</td>
+              <td>0.20</td>
+              <td>0.50</td>
+            </tr>
+            <tr>
+              <td>10</td>
+              <td>0.95</td>
+              <td>0.48</td>
+              <td>1.20</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.40</td>
+              <td>0.18</td>
+              <td>0.42</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="muted">© Waste to Watts — Smart Dustbin Energy System</div>
+        <div class="muted">Built with ♥ • <a href="#">GitHub</a> • <a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle && navToggle.addEventListener('click', ()=>{
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

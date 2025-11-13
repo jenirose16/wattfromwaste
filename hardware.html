@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Hardware — Waste to Watts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navbar (shared) -->
+  <header class="header">
+    <div class="container navbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Waste to Watts logo">
+        <h1>Waste to Watts</h1>
+      </div>
+      <nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+        <div id="nav-links" class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="future.html">Future Scope</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="title">
+        <h2>Hardware Components</h2>
+      </div>
+
+      <div class="card-grid">
+        <div class="component-card">
+          <h4>ESP32 Development Board</h4>
+          <p class="muted">Wi‑Fi & Bluetooth microcontroller used for data collection and uplink.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Microbial Fuel Cell (MFC)</h4>
+          <p class="muted">Bio-electrochemical cell where microbes convert organic matter into electrical current.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Load Cell + HX711</h4>
+          <p class="muted">Weight sensor and amplifier to measure paper mass inside the bin.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Voltage & Current Sensors</h4>
+          <p class="muted">Measure generated voltage and current from the MFC and power electronics.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Moisture Sensor</h4>
+          <p class="muted">Monitor moisture levels in the MFC chamber for optimal microbial activity.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Relay Module</h4>
+          <p class="muted">Switches loads or isolates components for safety and power management.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>Supercapacitor / Battery</h4>
+          <p class="muted">Store harvested energy for powering sensors or small loads.</p>
+        </div>
+
+        <div class="component-card">
+          <h4>LED Load</h4>
+          <p class="muted">Simple demonstrative load to show generated power in action.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="muted">© Waste to Watts — Smart Dustbin Energy System</div>
+        <div class="muted">Built with ♥ • <a href="#">GitHub</a> • <a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle && navToggle.addEventListener('click', ()=>{
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>

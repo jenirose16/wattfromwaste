@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Contact — Waste to Watts</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Header / Navbar (shared) -->
+  <header class="header">
+    <div class="container navbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Waste to Watts logo">
+        <h1>Waste to Watts</h1>
+      </div>
+      <nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+        <div id="nav-links" class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="future.html">Future Scope</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="section container">
+      <div class="title">
+        <h2>Contact</h2>
+      </div>
+
+      <div class="grid cols-2">
+        <div class="card">
+          <h3>Get in touch</h3>
+          <form class="form" onsubmit="handleSubmit(event)">
+            <label class="mb-1">Name
+              <input class="input" type="text" name="name" placeholder="Your name" required>
+            </label>
+
+            <label class="mb-1">Email
+              <input class="input" type="email" name="email" placeholder="you@domain.com" required>
+            </label>
+
+            <label class="mb-1">Message
+              <textarea name="message" placeholder="Tell us about your interest" required></textarea>
+            </label>
+
+            <button type="submit" class="btn btn-primary submit">Submit</button>
+          </form>
+        </div>
+
+        <div class="card">
+          <h3>Project Details</h3>
+          <p class="muted">Waste to Watts — Smart Dustbin Energy System. A prototype combining Microbial Fuel Cells and IoT monitoring to convert paper waste into electricity.</p>
+
+          <h4>Connect</h4>
+          <p class="muted">GitHub: <a href="#">github.com/your-repo</a></p>
+          <p class="muted">LinkedIn: <a href="#">linkedin.com/in/your-profile</a></p>
+
+          <h4>Address</h4>
+          <p class="muted">University / Lab / City, Country</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="muted">© Waste to Watts — Smart Dustbin Energy System</div>
+        <div class="muted">Built with ♥ • <a href="#">GitHub</a> • <a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle && navToggle.addEventListener('click', ()=>{
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('show');
+    });
+
+    // Simple submit handler (no backend)
+    function handleSubmit(e){
+      e.preventDefault();
+      alert('Thank you — message captured locally. Integrate backend to process submissions.');
+      e.target.reset();
+    }
+  </script>
+</body>
+</html>

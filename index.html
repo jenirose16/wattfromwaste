@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Waste to Watts – Home</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Page-specific small styles could go here -->
+</head>
+<body>
+  <!-- Header / Navbar (shared) -->
+  <header class="header">
+    <div class="container navbar">
+      <div class="brand">
+        <img src="assets/logo.svg" alt="Waste to Watts logo">
+        <h1>Waste to Watts</h1>
+      </div>
+      <nav>
+        <button class="nav-toggle" aria-expanded="false" aria-controls="nav-links">☰</button>
+        <div id="nav-links" class="nav-links">
+          <a href="index.html">Home</a>
+          <a href="about.html">About</a>
+          <a href="how-it-works.html">How It Works</a>
+          <a href="hardware.html">Hardware</a>
+          <a href="dashboard.html">Dashboard</a>
+          <a href="future.html">Future Scope</a>
+          <a href="contact.html">Contact</a>
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <main>
+    <section class="hero container">
+      <div class="content fade-in">
+        <!-- Hero title and subtitle -->
+        <h2>Waste to Watts – Turning Paper Waste Into Electricity</h2>
+        <p class="muted">A smart dustbin powered by Microbial Fuel Cells and wireless IoT monitoring.</p>
+        <div class="actions mb-2">
+          <a href="about.html" class="btn btn-secondary">Learn More</a>
+          <a href="dashboard.html" class="btn btn-primary">Live Dashboard</a>
+        </div>
+        <p class="muted">Join us in converting overlooked paper waste into usable, clean energy — monitored in real time.</p>
+      </div>
+
+      <div class="visual card fade-in">
+        <!-- Background illustration or photo -->
+        <div class="bg" role="img" aria-label="Eco tech illustration"></div>
+      </div>
+    </section>
+
+    <!-- Problem & Solution Sections -->
+    <section class="section container">
+      <div class="title">
+        <h3>Problem</h3>
+      </div>
+      <div class="card mb-2">
+        <p>Paper waste is one of the most common and overlooked forms of pollution. Most of it ends up in landfills, contributing to environmental damage.</p>
+      </div>
+
+      <div class="title">
+        <h3>Solution</h3>
+      </div>
+      <div class="card">
+        <p>Waste to Watts is a smart dustbin that converts paper waste into electrical energy using Microbial Fuel Cell technology, with real-time wireless monitoring.</p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer (shared) -->
+  <footer class="footer">
+    <div class="container">
+      <div class="row">
+        <div class="muted">© Waste to Watts — Smart Dustbin Energy System</div>
+        <div class="muted">created by jeni rose• <a href="#">GitHub</a> • <a href="#">LinkedIn</a></div>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // Mobile nav toggle
+    const navToggle = document.querySelector('.nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    navToggle && navToggle.addEventListener('click', ()=>{
+      const expanded = navToggle.getAttribute('aria-expanded') === 'true';
+      navToggle.setAttribute('aria-expanded', String(!expanded));
+      navLinks.classList.toggle('show');
+    });
+  </script>
+</body>
+</html>
