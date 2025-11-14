@@ -1,3 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Waste to Watts Live Dashboard</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Chart.js CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <header class="bg-green-700 text-white p-4 shadow flex items-center justify-between">
+    <h1 class="text-2xl font-bold">Waste to Watts Live Dashboard</h1>
+    <span class="text-sm">IoT Monitoring</span>
+  </header>
+
+  <!-- Alerts -->
+  <div id="alerts" class="fixed top-4 right-4 z-50 space-y-2"></div>
+
+  <main class="flex-1 container mx-auto px-4 py-6 flex flex-col gap-8">
+    <!-- KPIs -->
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-4">
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Voltage (V)</span>
+        <span id="kpi-voltage" class="text-2xl font-bold">--</span>
+      </div>
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Current (mA)</span>
+        <span id="kpi-current" class="text-2xl font-bold">--</span>
+      </div>
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Moisture (%)</span>
+        <span id="kpi-moisture" class="text-2xl font-bold">--</span>
+      </div>
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Paper Weight (g)</span>
+        <span id="kpi-weight" class="text-2xl font-bold">--</span>
+      </div>
+    </section>
+
+    <!-- Calculated Metrics -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Power (mW)</span>
+        <span id="kpi-power" class="text-2xl font-bold">--</span>
+      </div>
+      <div class="bg-white rounded shadow p-4 flex flex-col items-center">
+        <span class="text-gray-500">Stored Energy (mWh)</span>
+        <span id="kpi-energy" class="text-2xl font-bold">--</span>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      <div class="bg-white rounded shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Power vs. Time (Last 24h)</h2>
+        <canvas id="powerTimeChart" class="w-full h-64"></canvas>
+      </div>
+      <div class="bg-white rounded shadow p-4">
+        <h2 class="text-lg font-semibold mb-2">Efficiency: Weight vs. Power</h2>
+        <canvas id="efficiencyChart" class="w-full h-64"></canvas>
+      </div>
+    </section>
+
+    <!-- Data Input Mock -->
+    <section class="bg-white rounded shadow p-4 flex flex-col md:flex-row items-center gap-4">
+      <form id="mockDataForm" class="flex flex-wrap gap-2 items-end w-full md:w-auto">
+        <div>
+          <label class="block text-xs text-gray-500">Voltage (V)</label>
+          <input type="number" step="0.01" min="0" name="voltage" class="border rounded px-2 py-1 w-20" required />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500">Current (mA)</label>
+          <input type="number" step="0.01" min="0" name="current" class="border rounded px-2 py-1 w-20" required />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500">Moisture (%)</label>
+          <input type="number" step="0.1" min="0" max="100" name="moisture" class="border rounded px-2 py-1 w-20" required />
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500">Paper Weight (g)</label>
+          <input type="number" step="0.1" min="0" name="weight" class="border rounded px-2 py-1 w-20" required />
+        </div>
+        <button type="submit" class="bg-green-700 text-white px-4 py-2 rounded hover:bg-green-800">Push Mock Data</button>
+      </form>
+      <span class="text-xs text-gray-400">Pushes a random timestamped reading to Firestore</span>
+    </section>
+  </main>
+
+  <footer class="bg-gray-200 text-center text-xs py-2 text-gray-600">&copy; 2025 Waste to Watts IoT Dashboard</footer>
+
+  <!-- Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+  <script>
+    // --- Firebase Initialization ---
+    // These globals must be provided by the environment
+    const appId = typeof __app_id !== 'undefined' ? __app_id : 'demo-app';
+    const firebaseConfig = typeof __firebase_config !== 'undefined' ? __firebase_config : {
+      apiKey: "demo",
+      authDomain: "demo.firebaseapp.com",
+      projectId: "demo",
+      storageBucket: "demo.appspot.com",
+      messagingSenderId: "demo",
+      appId: "demo"
+    };
+    const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const db = firebase.firestore();
+
+    // --- Authentication ---
+    function signIn() {
+      if (initialAuthToken) {
+        return auth.signInWithCustomToken(initialAuthToken).catch(() => auth.signInAnonymously());
+      } else {
+        return auth.signInAnonymously();
+      }
+    }
+
+    // --- Utility Functions ---
+    function showAlert(message, type = 'info') {
+      const alerts = document.getElementById('alerts');
+      const color = type === 'danger' ? 'bg-red-600' : type === 'warning' ? 'bg-yellow-400 text-black' : 'bg-green-600';
+      const el = document.createElement('div');
+      el.className = `px-4 py-2 rounded shadow text-white mb-2 ${color}`;
+      el.textContent = message;
+      alerts.appendChild(el);
+      setTimeout(() => { el.remove(); }, 5000);
+    }
+
+    // --- Firestore Path ---
+    const collectionPath = `/artifacts/${appId}/public/data/telemetry`;
+    let telemetryRef;
+    let unsubscribe = null;
+
+    // --- State ---
+    let telemetryData = [];
+    let storedEnergy = 0; // mWh
+
+    // --- Chart.js Instances ---
+    let powerTimeChart, efficiencyChart;
+
+    // --- Data Processing ---
+    function updateKPIs(latest) {
+      document.getElementById('kpi-voltage').textContent = latest ? latest.voltage.toFixed(2) : '--';
+      document.getElementById('kpi-current').textContent = latest ? latest.current.toFixed(2) : '--';
+      document.getElementById('kpi-moisture').textContent = latest ? latest.moisture.toFixed(1) : '--';
+      document.getElementById('kpi-weight').textContent = latest ? latest.weight.toFixed(1) : '--';
+    }
+
+    function updateCalculated(latest, data) {
+      let power = latest ? latest.voltage * latest.current : 0; // mW
+      document.getElementById('kpi-power').textContent = latest ? power.toFixed(2) : '--';
+      // Calculate stored energy (mWh)
+      let energy = 0;
+      for (let i = 1; i < data.length; i++) {
+        let dt = (data[i].timestamp - data[i-1].timestamp) / 3600000; // hours
+        let p = data[i-1].voltage * data[i-1].current; // mW
+        energy += p * dt;
+      }
+      storedEnergy = energy;
+      document.getElementById('kpi-energy').textContent = data.length > 1 ? energy.toFixed(2) : '--';
+    }
+
+    function updateAlerts(latest, energy) {
+      if (latest && latest.weight > 450) {
+        showAlert('Bin Full: Paper Weight exceeds 450g!', 'danger');
+      }
+      if (energy > 100) {
+        showAlert('Capacity Alert: Stored Energy exceeds 100 mWh!', 'warning');
+      }
+    }
+
+    function updateCharts(data) {
+      // Power vs Time (last 24h)
+      const now = Date.now();
+      const dayAgo = now - 24 * 3600 * 1000;
+      const filtered = data.filter(d => d.timestamp >= dayAgo);
+      const labels = filtered.map(d => new Date(d.timestamp).toLocaleTimeString());
+      const powerData = filtered.map(d => d.voltage * d.current);
+      if (!powerTimeChart) {
+        powerTimeChart = new Chart(document.getElementById('powerTimeChart').getContext('2d'), {
+          type: 'line',
+          data: {
+            labels,
+            datasets: [{
+              label: 'Power (mW)',
+              data: powerData,
+              borderColor: '#059669',
+              backgroundColor: 'rgba(16,185,129,0.1)',
+              fill: true,
+              tension: 0.3
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: { x: { title: { display: true, text: 'Time' } }, y: { title: { display: true, text: 'Power (mW)' } } }
+          }
+        });
+      } else {
+        powerTimeChart.data.labels = labels;
+        powerTimeChart.data.datasets[0].data = powerData;
+        powerTimeChart.update();
+      }
+      // Efficiency: Weight vs Power
+      const effLabels = data.map(d => d.weight.toFixed(1));
+      const effPower = data.map(d => d.voltage * d.current);
+      if (!efficiencyChart) {
+        efficiencyChart = new Chart(document.getElementById('efficiencyChart').getContext('2d'), {
+          type: 'scatter',
+          data: {
+            datasets: [{
+              label: 'Weight vs Power',
+              data: data.map(d => ({ x: d.weight, y: d.voltage * d.current })),
+              backgroundColor: '#2563eb',
+              pointRadius: 4
+            }]
+          },
+          options: {
+            responsive: true,
+            plugins: { legend: { display: false } },
+            scales: {
+              x: { title: { display: true, text: 'Paper Weight (g)' } },
+              y: { title: { display: true, text: 'Power (mW)' } }
+            }
+          }
+        });
+      } else {
+        efficiencyChart.data.datasets[0].data = data.map(d => ({ x: d.weight, y: d.voltage * d.current }));
+        efficiencyChart.update();
+      }
+    }
+
+    // --- Firestore Listener ---
+    function listenToTelemetry() {
+      if (unsubscribe) unsubscribe();
+      telemetryRef = db.collection(collectionPath);
+      unsubscribe = telemetryRef.orderBy('timestamp', 'asc').onSnapshot(snapshot => {
+        telemetryData = [];
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          telemetryData.push({
+            voltage: Number(d.voltage),
+            current: Number(d.current),
+            moisture: Number(d.moisture),
+            weight: Number(d.weight),
+            timestamp: Number(d.timestamp)
+          });
+        });
+        if (telemetryData.length) {
+          const latest = telemetryData[telemetryData.length - 1];
+          updateKPIs(latest);
+          updateCalculated(latest, telemetryData);
+          updateAlerts(latest, storedEnergy);
+          updateCharts(telemetryData);
+        }
+      });
+    }
+
+    // --- Mock Data Input ---
+    document.getElementById('mockDataForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const form = e.target;
+      const voltage = parseFloat(form.voltage.value);
+      const current = parseFloat(form.current.value);
+      const moisture = parseFloat(form.moisture.value);
+      const weight = parseFloat(form.weight.value);
+      const timestamp = Date.now();
+      telemetryRef.add({ voltage, current, moisture, weight, timestamp })
+        .then(() => showAlert('Mock data pushed!', 'success'))
+        .catch(() => showAlert('Failed to push mock data', 'danger'));
+      form.reset();
+    });
+
+    // --- Main ---
+    signIn().then(listenToTelemetry);
+  </script>
+</body>
+</html>
 <!doctype html>
 <html lang="en">
 <head>
